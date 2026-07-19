@@ -32,7 +32,7 @@ app = FastAPI(title="Сияние API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -121,4 +121,4 @@ def me(current_user: models.User = Depends(get_current_user)):
 
 @app.get("/")
 def health_check():
-    return {"status": "ok", "service": "Сияние API"}        
+    return {"status": "ok", "service": "Сияние API"}

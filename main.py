@@ -2,7 +2,7 @@
 Сияние — backend API (регистрация по email, подтверждение кодом, вход).
 
 Запуск локально:
-    uvicorn app.main:app --reload
+    uvicorn main:app --reload
 
 Эндпоинты:
     POST /register  -> {email, password}       создаёт пользователя, шлёт код на почту
@@ -17,8 +17,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 
-from . import models, schemas, auth, email_utils
-from .database import engine, get_db, Base
+import models, schemas, auth, email_utils
+from database import engine, get_db, Base
 
 # Создаёт таблицы при первом запуске (для продакшена лучше Alembic-миграции,
 # но для старта и теста этого достаточно)
@@ -63,7 +63,6 @@ def register(payload: schemas.RegisterRequest, db: Session = Depends(get_db)):
     expires = auth.code_expiry()
 
     if existing:
-        # Пользователь начал регистрацию раньше, но не подтвердил её — обновляем
         existing.password_hash = auth.hash_password(payload.password)
         existing.verification_code = code
         existing.code_expires_at = expires
@@ -122,4 +121,4 @@ def me(current_user: models.User = Depends(get_current_user)):
 
 @app.get("/")
 def health_check():
-    return {"status": "ok", "service": "Сияние API"}
+    return {"status": "ok", "service": "Сияние API"}        

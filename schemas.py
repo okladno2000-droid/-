@@ -23,3 +23,26 @@ class TokenResponse(BaseModel):
 
 class MessageResponse(BaseModel):
     message: str
+
+
+class StartChatRequest(BaseModel):
+    email: EmailStr
+
+
+class ChatOut(BaseModel):
+    chat_id: int
+    with_email: str
+    last_message: str | None = None
+    last_message_at: str | None = None
+
+
+class SendMessageRequest(BaseModel):
+    text: str
+
+
+class MessageOut(BaseModel):
+    id: int
+    sender_email: str
+    text: str
+    created_at: str
+    is_mine: bool
